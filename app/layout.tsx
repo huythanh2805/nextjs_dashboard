@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { inter } from "@/lib/font";
+import ReactQueryProvider from "@/utils/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Nextjs-dashboard",
@@ -17,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} antialiased`}
-      >
-        {children}
+      <body className={`${inter.className} antialiased`}>
+        <ReactQueryProvider>
+         {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
