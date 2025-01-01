@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { inter, lusitana } from "@/lib/font";
+import { inter } from "@/lib/font";
 
 export const metadata: Metadata = {
   title: "Nextjs-dashboard",
