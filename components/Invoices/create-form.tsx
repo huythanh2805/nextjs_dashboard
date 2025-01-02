@@ -6,18 +6,24 @@ import Link from "next/link";
 import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import ButtonCustomed from "../button";
-import { Customer } from "@prisma/client";
+import { Customer, InvoiceStatus } from "@prisma/client";
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { CreateInVoiceSchema } from "@/lib/schema";
+import { createInvoice } from "@/actions/Invoices";
+import { toast } from "@/hooks/use-toast";
 
-const schema = z.object({
-  customer_id: z.string(),
-  amount: z.coerce.number(),
-  status: z.string(),
-  date: z.date(),
-});
+
+// const schema = z.object({
+//   customer_id: z.string(),
+//   amount: z.coerce.number(),
+//   status: z.string(),
+//   date: z.date(),
+// });
 
 export default function FormShadcn({ customers } : {customers: Customer[]}) {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(CreateInVoiceSchema),
     defaultValues: {
       customer_id: "",
       amount: 0,
@@ -26,8 +32,11 @@ export default function FormShadcn({ customers } : {customers: Customer[]}) {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
+  const onSubmit = async (data: z.infer<typeof CreateInVoiceSchema>) => {
     console.log(data);
+    const {success, error} = await createInvoice(data)
+    if(error) toast({ title: error })
+    if(success) toast({ title: success })
     form.reset();
   };
 
@@ -35,7 +44,10 @@ export default function FormShadcn({ customers } : {customers: Customer[]}) {
     <Form {...form}>
       <form onSubmit={(e) => {
           e.preventDefault(),
-          onSubmit(form.getValues())
+          onSubmit({
+            ...form.getValues(),
+            status: form.getValues().status as InvoiceStatus
+          })
       }}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Customer Name */}
@@ -132,6 +144,7 @@ export default function FormShadcn({ customers } : {customers: Customer[]}) {
               </div>
             </div>
           </fieldset>
+          
         </div>
 
         <div className="mt-6 flex justify-end gap-4">

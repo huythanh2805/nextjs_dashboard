@@ -1,8 +1,10 @@
 import { useGetCustomer } from "@/actions/Customers";
 import { CreateInvoice } from "@/components/Invoices/buttons";
+import Pagination from "@/components/Invoices/pagination";
 import InvoicesTable from "@/components/Invoices/table";
 import Search from "@/components/search";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
+import { fetchInvoicesPages } from "@/lib/data";
 import prisma from "@/lib/db";
 import { lusitana } from "@/lib/font";
 import { BaseUrl } from "@/lib/utils";
@@ -26,6 +28,7 @@ export default async function InvoicesPage(props: {
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;
+    const totalPages = await fetchInvoicesPages(query);
     // const {data, error, isLoading} = useQuery({
     //   queryKey: ["getCustomers"],
     //   queryFn: getInvoices
@@ -43,7 +46,7 @@ export default async function InvoicesPage(props: {
           <InvoicesTable query={query} currentPage={currentPage} />
         </Suspense>
         <div className="mt-5 flex w-full justify-center">
-          {/* <Pagination totalPages={totalPages} /> */}
+          <Pagination totalPages={totalPages} />
         </div>
       </div>
     );

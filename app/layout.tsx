@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { inter } from "@/lib/font";
 import ReactQueryProvider from "@/utils/ReactQueryProvider";
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Nextjs-dashboard",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <ReactQueryProvider>
          {children}
         </ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   );

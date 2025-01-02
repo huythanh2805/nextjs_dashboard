@@ -1,26 +1,15 @@
 "use server"
 import { z } from "zod"
-import { Invoice } from "@prisma/client"
 import prisma from "@/lib/db"
-const CreateInVoiceSchema = z.object({
-  customer_id: z.string(),
-  amount: z.coerce.number(),
-  status: z.enum(["pending", "paid"]),
-  date: z.date()
-})
-export async function createInvoice(formData: FormData) {
-  const rawFormData = {
-    customer_id: formData.get("customerId"),
-    amount: formData.get("amount"),
-    status: formData.get("status"),
-    date: new Date(),
-  }
+import { CreateInVoiceSchema } from "@/lib/schema"
+
+export async function createInvoice(data: z.infer<typeof CreateInVoiceSchema>): Promise<{success?: string, error?: string}> {
 //   Validate 1 lần nữa ở server dựa trên zod
-  const validateFileds = CreateInVoiceSchema.safeParse(rawFormData)
+  const validateFileds = CreateInVoiceSchema.safeParse(data)
   const { success, data: validataData, error } = validateFileds
-  if(error) return
+  if(error) return {error: "Dữ liệu truyền vào không hợp lệ"}
   await prisma.invoice.create({
     data : validataData
   })
-  
+  return {success: "Bạn đã tạo thành công"}
 }
