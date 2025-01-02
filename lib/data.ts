@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Revenue } from "./type";
 
 const prisma = new PrismaClient();
 const ITEMS_PER_PAGE = 10; // Thay đổi số lượng items mỗi trang theo nhu cầu
@@ -88,4 +89,30 @@ export async function fetchInvoicesPages(query: string): Promise<number> {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
   }
+}
+export async function fetchRevenue() {
+  const revenueByMonth = await prisma.revenue.groupBy({
+    by: ['month'], // Nhóm theo tháng
+    _sum: {
+      revenue: true, // Tính tổng revenue
+    },
+    orderBy: {
+      month: 'asc'
+    }
+  });
+  const revenue = revenueByMonth.map(item=>({revenue: item._sum.revenue, month: item.month})) as Revenue[]
+ return revenue.sort((a, b) => parseInt(a.month) - parseInt(b.month)) as Revenue[];
+  
+}
+export async function fetchFiveLastInvoices () {
+  const fiveLastInvoices = await prisma.invoice.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    },
+    include: {
+      customer: true
+    },
+    take: 5
+  })
+  return fiveLastInvoices
 }

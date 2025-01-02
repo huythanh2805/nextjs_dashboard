@@ -13,14 +13,6 @@ import { CreateInVoiceSchema } from "@/lib/schema";
 import { createInvoice } from "@/actions/Invoices";
 import { toast } from "@/hooks/use-toast";
 
-
-// const schema = z.object({
-//   customer_id: z.string(),
-//   amount: z.coerce.number(),
-//   status: z.string(),
-//   date: z.date(),
-// });
-
 export default function FormShadcn({ customers } : {customers: Customer[]}) {
   const form = useForm({
     resolver: zodResolver(CreateInVoiceSchema),
