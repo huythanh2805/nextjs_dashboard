@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['media.npr.org'], // Thêm hostname tại đây
+        domains: ['media.npr.org', "cdn.pixabay.com", "media.istockphoto.com"],
       },
 };
 

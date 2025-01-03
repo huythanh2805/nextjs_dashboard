@@ -91,6 +91,9 @@ export async function fetchInvoicesPages(query: string): Promise<number> {
   }
 }
 export async function fetchRevenue() {
+  console.log('Fetching revenue data...');
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  console.log('5s');
   const revenueByMonth = await prisma.revenue.groupBy({
     by: ['month'], // Nhóm theo tháng
     _sum: {
@@ -115,4 +118,28 @@ export async function fetchFiveLastInvoices () {
     take: 5
   })
   return fiveLastInvoices
+}
+export async function fetchAllCard () {
+  const totalInvoices = await prisma.invoice.count()
+  const totalCustomers = await prisma.customer.count()
+  const pendingInvoices = await prisma.invoice.count({
+    where: {
+      status: 'pending'
+    }
+  })
+  const paidInvoices = await prisma.invoice.count({
+    where: {
+      status: 'paid'
+    }
+  })
+  console.log("Fetching card data...")
+  await new Promise((relsove) => setTimeout(relsove, 3000))
+  // throw new Error("Không thể lấy dữ liệu")
+  console.log('3s')
+  return {
+    totalInvoices,
+    totalCustomers,
+    pendingInvoices,
+    paidInvoices
+  }
 }

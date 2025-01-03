@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 type Props = {
   error: Error,
-  reset: () => {}
+  reset: () => void
 }
 function ErrorPage({error, reset}: Props) {
   console.log({error})

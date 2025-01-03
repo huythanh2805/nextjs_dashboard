@@ -1,23 +1,12 @@
-import { useGetCustomer } from "@/actions/Customers";
 import { CreateInvoice } from "@/components/Invoices/buttons";
 import Pagination from "@/components/Invoices/pagination";
 import InvoicesTable from "@/components/Invoices/table";
 import Search from "@/components/search";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
 import { fetchInvoicesPages } from "@/lib/data";
-import prisma from "@/lib/db";
 import { lusitana } from "@/lib/font";
-import { BaseUrl } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 
-// const getInvoices = async () => {
-//   const res = await fetch(`${BaseUrl}/api`,{
-//     method: "GET"
-//   })
-//   const data = await res.json()
-//   return data
-// }
 type ParamsQuery = {
    query?: string,
    page?: string
@@ -29,10 +18,6 @@ export default async function InvoicesPage(props: {
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;
     const totalPages = await fetchInvoicesPages(query);
-    // const {data, error, isLoading} = useQuery({
-    //   queryKey: ["getCustomers"],
-    //   queryFn: getInvoices
-    // })
       return (
       <div className="w-full">
         <div className="flex w-full items-center justify-between">

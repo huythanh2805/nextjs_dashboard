@@ -7,8 +7,6 @@ import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroi
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import ButtonCustomed from "../button";
 import { Customer, InvoiceStatus } from "@prisma/client";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { CreateInVoiceSchema } from "@/lib/schema";
 import { createInvoice } from "@/actions/Invoices";
 import { toast } from "@/hooks/use-toast";
@@ -35,7 +33,7 @@ export default function FormShadcn({ customers } : {customers: Customer[]}) {
   return (
     <Form {...form}>
       <form onSubmit={(e) => {
-          e.preventDefault(),
+          e.preventDefault();
           onSubmit({
             ...form.getValues(),
             status: form.getValues().status as InvoiceStatus
