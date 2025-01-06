@@ -1,5 +1,10 @@
+"use client"
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import PromptDialog from '../PromptDialog';
+import { deleteInvoice } from '@/actions/Invoices';
+import { toast } from '@/hooks/use-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function CreateInvoice() {
   return (
@@ -23,15 +28,28 @@ export function UpdateInvoice({ id }: { id: string }) {
     </Link>
   );
 }
-
 export function DeleteInvoice({ id }: { id: string }) {
-  
+  const queryClient = useQueryClient()
+
+  const handleClick = async (id: string) => {
+    const {success, error} = await deleteInvoice(id)
+    console.log({error})
+    if(success) {
+     toast({title: success})
+     queryClient.invalidateQueries({queryKey: ['getAllInvoices']})
+    }
+  }
   return (
     <>
-      <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete {id}</span>
+      <PromptDialog 
+       title='Xóa'
+       handleClick={() => handleClick(id)}
+      >
+      <div className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
-      </button>
+      </div>
+      </PromptDialog>
     </>
   );
 }

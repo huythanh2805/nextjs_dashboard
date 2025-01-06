@@ -8,25 +8,31 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import ButtonCustomed from "../button";
 import { Customer, InvoiceStatus } from "@prisma/client";
 import { CreateInVoiceSchema } from "@/lib/schema";
-import { createInvoice } from "@/actions/Invoices";
+import { createInvoice, getDetailInvoice } from "@/actions/Invoices";
 import { toast } from "@/hooks/use-toast";
-
-export default function FormShadcn({ customers } : {customers: Customer[]}) {
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+type Props = {
+   customers: Customer[]
+}
+const CreateFormInvoice: React.FC<Props> = ({ customers }) => {
+  const queryClient = useQueryClient()
   const form = useForm({
     resolver: zodResolver(CreateInVoiceSchema),
     defaultValues: {
-      customer_id: "",
+      customer_id:  "",
       amount: 0,
-      status: "pending",
-      date: new Date(),
+      status:"pending",
+      date:new Date(),
     },
   });
 
   const onSubmit = async (data: z.infer<typeof CreateInVoiceSchema>) => {
-    console.log(data);
     const {success, error} = await createInvoice(data)
     if(error) toast({ title: error })
-    if(success) toast({ title: success })
+    if(success){
+      toast({ title: success })
+      queryClient.invalidateQueries({ queryKey: ["getAllInvoices"]})
+    } 
     form.reset();
   };
 
@@ -150,3 +156,4 @@ export default function FormShadcn({ customers } : {customers: Customer[]}) {
     </Form>
   );
 }
+export default CreateFormInvoice

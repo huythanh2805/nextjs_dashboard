@@ -13,6 +13,7 @@ const LatestInvoices = async () => {
   ['fetchingLatestInvoices'],
   {
     tags: ['fetchingLatestInvoices'],
+    revalidate: false
   }
 )
   const latestInvoices = await cachingData()

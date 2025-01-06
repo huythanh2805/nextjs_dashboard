@@ -1,17 +1,25 @@
+"use client"
 import Image from 'next/image';
 import InvoiceStatus from './status';
 import { DeleteInvoice, UpdateInvoice } from './buttons';
 import { formatCurrency, formatDateToLocal } from '@/lib/format';
 import { fetchFilteredInvoices } from '@/lib/data';
+import { useQuery } from '@tanstack/react-query';
 
-export default async function InvoicesTable({
+// Nếu mà để func này thành async thì sẽ có hiệu ứng của
+// suspense của server, nhưng khi tương tác với db thì nó sẽ xuất hiện hiệu ứng khó chịu
+export default function InvoicesTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+  const {data: invoices, error, isLoading} = useQuery({
+    queryKey: ["getAllInvoices"],
+    queryFn: () => fetchFilteredInvoices(query, currentPage)
+  })
+  console.log({invoices})
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

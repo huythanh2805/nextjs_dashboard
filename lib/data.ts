@@ -1,3 +1,4 @@
+"use server"
 import { PrismaClient } from "@prisma/client";
 import { Revenue } from "./type";
 
@@ -6,7 +7,6 @@ const ITEMS_PER_PAGE = 10; // Thay đổi số lượng items mỗi trang theo n
 
 export async function fetchFilteredInvoices(query: string, currentPage: number) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
   try {
     const invoices = await prisma.invoice.findMany({
       where: {
@@ -132,10 +132,6 @@ export async function fetchAllCard () {
       status: 'paid'
     }
   })
-  console.log("Fetching card data...")
-  await new Promise((relsove) => setTimeout(relsove, 3000))
-  // throw new Error("Không thể lấy dữ liệu")
-  console.log('3s')
   return {
     totalInvoices,
     totalCustomers,

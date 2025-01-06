@@ -2,15 +2,25 @@ import { CalendarIcon } from '@heroicons/react/24/outline';
 import { generateYAxis } from '@/lib/format';
 import { lusitana } from '@/lib/font';
 import { fetchRevenue } from '@/lib/data';
+import { unstable_cache } from 'next/cache';
 
 // This component is representational only.
 // For data visualization UI, check out:
 // https://www.tremor.so/
 // https://www.chartjs.org/
 // https://airbnb.io/visx/
-
 export default async function RevenueChart() {
-  const revenue = await fetchRevenue()
+  // const revenue = await fetchRevenue()
+   const cachingData = unstable_cache(async () => {
+      return await fetchRevenue()
+    },
+    ['fetchingChart'],
+    {
+      tags: ['fetchingChart'],
+      revalidate: 1,
+    }
+  )
+  const revenue = await cachingData()
   const chartHeight = 350;
   // NOTE: Uncomment this code in Chapter 7
   const { yAxisLabels, topLabel } = generateYAxis(revenue);

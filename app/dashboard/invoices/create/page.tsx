@@ -1,7 +1,7 @@
 import Breadcrumbs from "@/components/Invoices/breadcrumbs";
-import Form from "@/components/Invoices/create-form";
 import prisma from "@/lib/db";
 import { Customer } from "@prisma/client";
+import CreateFormInvoice from "@/components/Invoices/create-form";
 
 export default async function CreateInvoicePage() {
   const customers: Customer[] = await prisma.customer.findMany({})
@@ -17,7 +17,7 @@ export default async function CreateInvoicePage() {
           },
         ]}
       />
-      <Form customers={customers} />
+      <CreateFormInvoice customers={customers} />
     </main>
   );
   }
