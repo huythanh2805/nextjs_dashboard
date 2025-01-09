@@ -1,0 +1,69 @@
+"use client";
+import Lottie, { LottieRefCurrentProps } from "lottie-react";
+import { useState, useRef } from "react";
+import { Skeleton } from "./ui/skeleton";
+
+import login from "@/animations/login.json";
+import eyes from "@/animations/eyes.json"
+import register from "@/animations/register.json"
+
+export const LoginAnimation = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+
+  // Kiểm tra khi Lottie animation đã sẵn sàng
+  const handleAnimationLoaded = () => {
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="w-[750px] flex items-center justify-center">
+      {isLoading && <Skeleton className="w-[750px] h-[650px] rounded-lg" />}
+      <Lottie
+        lottieRef={lottieRef}
+        animationData={login}
+        onDOMLoaded={handleAnimationLoaded} // Gọi khi animation đã sẵn sàng
+      />
+    </div>
+  );
+};
+export const RegisterAnimation = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+
+  // Kiểm tra khi Lottie animation đã sẵn sàng
+  const handleAnimationLoaded = () => {
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="w-[750px] flex items-center justify-center">
+      {isLoading && <Skeleton className="w-[750px] h-[650px] rounded-lg" />}
+      <Lottie
+        lottieRef={lottieRef}
+        animationData={register}
+        onDOMLoaded={handleAnimationLoaded} // Gọi khi animation đã sẵn sàng
+      />
+    </div>
+  );
+};
+export const EyesAnimation = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+
+  // Kiểm tra khi Lottie animation đã sẵn sàng
+  const handleAnimationLoaded = () => {
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="w-full flex items-center justify-center">
+      {isLoading && <Skeleton className="w-[150px] h-[46px] rounded-lg" />}
+      <Lottie
+        lottieRef={lottieRef}
+        animationData={eyes}
+        onDOMLoaded={handleAnimationLoaded} // Gọi khi animation đã sẵn sàng
+      />
+    </div>
+  );
+};

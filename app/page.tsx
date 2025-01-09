@@ -1,13 +1,16 @@
-import AcmeLogo from "@/components/acm-logo";
+import { auth } from "@/auth";
 import { ArrowRightIcon } from "lucide-react";
+import AcmeLogo from "@/components/acm-logo";
 import Image from "next/image";
 import Link from "next/link";
 
 // export const dynamic = "force-dynamic"
 // export const revalidate = 60
-export default function Home() {
+export default async function Home() {
+  const session = await auth()
     return (
       <main className="flex min-h-screen flex-col p-6">
+        {JSON.stringify(session)}
         <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
           <AcmeLogo />
         </div>

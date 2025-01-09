@@ -9,7 +9,16 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		boxShadow: {
+          'shadownButton': '1px 1px 5px 0px',
+          'shadownButtonHover': '1px 1px 5px 0px',
+		  'panelShadown': '3px 2px 10px 0'
+		},
   		colors: {
+			gray: {
+				1: '#999999',
+				2: '#dfe2e4'
+			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
