@@ -5,8 +5,8 @@ import { z } from "zod"
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/db'
 import { signIn } from "@/auth"
-import { DEFAULT_REDIRECT_ROUTE } from "@/Routes"
 import { AuthError } from "next-auth"
+import { defaultRouteRedirect } from "@/Routes"
 
 type ActionProps = {
     success?: string,
@@ -44,7 +44,7 @@ export const LoginAction = async (values: z.infer<typeof LoginSchame>): Promise<
      await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_REDIRECT_ROUTE  
+      redirectTo: defaultRouteRedirect  
      })
    } catch (error) {
     if(error instanceof AuthError) {

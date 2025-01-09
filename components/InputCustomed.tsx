@@ -6,7 +6,7 @@ type Props = {
   type: string,
   placeHolder: string,
   value: string,
-  setValue: (value: string) => void
+  setValue: (value: string) => void,
 }
 const InputCustomed: React.FC<Props> = ({
    placeHolder,

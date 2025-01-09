@@ -17,6 +17,7 @@ import { LoginSchame } from '@/lib/schema'
 import { useTransition } from 'react'
 import { LoginAction } from '@/actions/Auth'
 import { toast } from '@/hooks/use-toast'
+import { defaultRouteRedirect } from '@/Routes'
  
 const LoginForm = () => {
     const navigate = useRouter()
@@ -36,6 +37,7 @@ const LoginForm = () => {
         if(success) {
           toast({title: success})
           form.reset()
+          navigate.push(defaultRouteRedirect)
         }
         if(error) toast({title: error, variant: "destructive"})
       })
