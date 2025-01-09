@@ -1,9 +1,12 @@
 "use server"
 import { getUserByEmail } from "@/data/user"
-import { RegisterSchame } from "@/lib/schema"
+import { LoginSchame, RegisterSchame } from "@/lib/schema"
 import { z } from "zod"
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/db'
+import { signIn } from "@/auth"
+import { DEFAULT_REDIRECT_ROUTE } from "@/Routes"
+import { AuthError } from "next-auth"
 
 type ActionProps = {
     success?: string,
@@ -32,4 +35,26 @@ export const RegisterAction = async (values: z.infer<typeof RegisterSchame>): Pr
      return {error: "Something went wrong"}
    }
    return {success: "Bạn đã đăng kí thành công"}
+}
+export const LoginAction = async (values: z.infer<typeof LoginSchame>): Promise<ActionProps> => {
+   const {data, success} = LoginSchame.safeParse(values)
+   if(!success) return {error: "Invalid data"}
+   const {email, password} = data
+   try {
+     await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_REDIRECT_ROUTE  
+     })
+   } catch (error) {
+    if(error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return {error: "Invalid Credentials"}
+        default:
+          return {error: "Something went wrong"}
+      }
+    }
+   }
+   return {success: "Đăng nhập thành công"}
 }

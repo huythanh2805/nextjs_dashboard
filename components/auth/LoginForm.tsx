@@ -13,24 +13,33 @@ import {
 import { z } from "zod"
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
+import { LoginSchame } from '@/lib/schema'
+import { useTransition } from 'react'
+import { LoginAction } from '@/actions/Auth'
+import { toast } from '@/hooks/use-toast'
  
-const formSchema = z.object({
-  username: z.string().email({message: "Email không hợp lệ"}),
-  password: z.string({required_error: "Bạn cần nhập mật khẩu"})
-})
 const LoginForm = () => {
     const navigate = useRouter()
+    const [isPending, startTransition] = useTransition()
       // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginSchame>>({
+    resolver: zodResolver(LoginSchame),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  function onSubmit(values: z.infer<typeof LoginSchame>) {
+    startTransition(() => {
+      LoginAction(values).then((data)=>{
+        const {success, error} = data
+        if(success) {
+          toast({title: success})
+          form.reset()
+        }
+        if(error) toast({title: error, variant: "destructive"})
+      })
+    })
   }
   const handleLoginNavigate = () => {
     navigate.push('/register')
@@ -41,7 +50,7 @@ const LoginForm = () => {
          {/* Email */}
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem
             className='pb-8'
@@ -80,7 +89,7 @@ const LoginForm = () => {
         <div className='w-full flex items-center justify-end py-2 pb-4'>
         <div onClick={handleLoginNavigate} className='hover:underline cursor-pointer hover:text-blue-700' >Bạn chưa có tài khoản ?</div>
         </div>
-        <ButtonCustome buttonText='Đăng nhập' />
+        <ButtonCustome buttonText='Đăng nhập' loading={isPending} />
       </form>
     </Form>
   )

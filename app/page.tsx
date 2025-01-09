@@ -1,8 +1,9 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import { ArrowRightIcon } from "lucide-react";
 import AcmeLogo from "@/components/acm-logo";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 // export const dynamic = "force-dynamic"
 // export const revalidate = 60
@@ -11,6 +12,12 @@ export default async function Home() {
     return (
       <main className="flex min-h-screen flex-col p-6">
         {JSON.stringify(session)}
+        <form action={async () => {
+          "use server"
+          await signOut()
+        }}>
+        <Button>Sign out</Button>
+        </form>
         <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
           <AcmeLogo />
         </div>

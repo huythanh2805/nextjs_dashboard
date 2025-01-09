@@ -14,6 +14,10 @@ export const RegisterSchame = z.object({
     })
    }
 })
+export const LoginSchame = z.object({
+  email: z.string().email({message: "Email không hợp lệ"}),
+  password: z.string({required_error: "Bạn cần nhập mật khẩu"}),
+})
 export const CreateInVoiceSchema = z.object({
   customer_id: z.string(),
   amount: z.coerce.number(),
