@@ -6,8 +6,8 @@ import { NextResponse } from "next/server"
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
-  console.log(req.nextUrl.pathname)
   const currentRoute = req.nextUrl.pathname
+  console.log('Middleware')
 
   const isLoggedIn = !!req.auth
   const isApiAuthRoute = currentRoute.startsWith(authApiPrefix)
