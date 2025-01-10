@@ -18,11 +18,14 @@ import { useTransition } from 'react'
 import { LoginAction } from '@/actions/Auth'
 import { toast } from '@/hooks/use-toast'
 import { defaultRouteRedirect } from '@/Routes'
- 
-const LoginForm = () => {
-    const navigate = useRouter()
-    const [isPending, startTransition] = useTransition()
-      // 1. Define your form.
+import { BiSolidError } from "react-icons/bi";
+type Props = {
+  error?: string
+}
+const LoginForm: React.FC<Props> = ({ error }) => {
+  const navigate = useRouter()
+  const [isPending, startTransition] = useTransition()
+    // 1. Define your form.
   const form = useForm<z.infer<typeof LoginSchame>>({
     resolver: zodResolver(LoginSchame),
     defaultValues: {
@@ -91,6 +94,13 @@ const LoginForm = () => {
         <div className='w-full flex items-center justify-end py-2 pb-4'>
         <div onClick={handleLoginNavigate} className='hover:underline cursor-pointer hover:text-blue-700' >Bạn chưa có tài khoản ?</div>
         </div>
+        {
+          error && 
+            <div className='w-full px-3 py-3 mb-4 rounded-lg flex items-center bg-red-400 text-white text-lg font-[300]'>
+             <BiSolidError className='text-2xl mr-2' />
+             {error === "OAuthAccountNotLinked" ? "Email in use with a different provider" : error}
+          </div>
+        }
         <ButtonCustome buttonText='Đăng nhập' loading={isPending} />
       </form>
     </Form>
