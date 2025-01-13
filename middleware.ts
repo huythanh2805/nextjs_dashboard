@@ -7,7 +7,6 @@ const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
   const currentRoute = req.nextUrl.pathname
-  console.log('Middleware')
 
   const isLoggedIn = !!req.auth
   const isApiAuthRoute = currentRoute.startsWith(authApiPrefix)

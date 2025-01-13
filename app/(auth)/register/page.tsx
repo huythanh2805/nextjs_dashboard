@@ -1,5 +1,4 @@
-import { LoginAnimation, RegisterAnimation } from "@/components/animation"
-import LoginForm from "@/components/auth/LoginForm"
+import { RegisterAnimation } from "@/components/animation"
 import RegisterForm from "@/components/auth/RegisterForm"
 import AuthCardWrapper from "@/components/AuthCardWrapper"
 

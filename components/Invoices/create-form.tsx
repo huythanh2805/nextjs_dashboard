@@ -8,9 +8,9 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import ButtonCustomed from "../button";
 import { Customer, InvoiceStatus } from "@prisma/client";
 import { CreateInVoiceSchema } from "@/lib/schema";
-import { createInvoice, getDetailInvoice } from "@/actions/Invoices";
+import { createInvoice } from "@/actions/Invoices";
 import { toast } from "@/hooks/use-toast";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 type Props = {
    customers: Customer[]
 }

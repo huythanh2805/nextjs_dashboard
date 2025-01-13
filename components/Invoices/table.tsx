@@ -15,7 +15,7 @@ export default function InvoicesTable({
   query: string;
   currentPage: number;
 }) {
-  const {data: invoices, error, isLoading} = useQuery({
+  const {data: invoices} = useQuery({
     queryKey: ["getAllInvoices"],
     queryFn: () => fetchFilteredInvoices(query, currentPage)
   })

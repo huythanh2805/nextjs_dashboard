@@ -8,6 +8,7 @@ import { getUserById } from "./data/user"
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
    signIn: "/login",
+   error: "/login",
   },
   events: {
     async linkAccount({user}){
@@ -19,22 +20,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
-          console.log('signIn')
+         if(account?.provider !== "credentials") return true
+        if(!user || !user.id) return false
+        const existingUser = await getUserById(user.id)
+        if(!existingUser?.emailVerified) return false
         return true
       },
       async session({ session, user, token }) {
           session.user.role = token.role as string
-          console.log(session)
+          if(!token.sub) return session
+          session.user.id = token.sub
         return session
       },
       async jwt({ token, user, account, profile, isNewUser }) {
         if(!token.sub) return token
-        const existedUser = await getUserById(token.sub)
-        if(!existedUser) return token
-        token.role = existedUser?.role
+        const existingUser = await getUserById(token.sub)
+        if(!existingUser) return token
+        token.role = existingUser?.role
         return token
       }
   },
+  secret: process.env.NEXTAUTH_SECRET,
+  
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   ...authConfig,

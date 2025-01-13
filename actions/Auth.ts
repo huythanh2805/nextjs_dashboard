@@ -7,10 +7,16 @@ import prisma from '@/lib/db'
 import { signIn } from "@/auth"
 import { AuthError } from "next-auth"
 import { defaultRouteRedirect } from "@/Routes"
+import { verificationTokenSendEmail } from "@/lib/nodemailer"
+import { generateVerificationTokenByEmail } from "@/data/verificationToken"
 
 type ActionProps = {
     success?: string,
     error?: string
+}
+export const handleLoginWithGoogle = async () => {
+  "use server"
+  await signIn("google")
 }
 export const RegisterAction = async (values: z.infer<typeof RegisterSchame>): Promise<ActionProps> => {
    const {data, success} = RegisterSchame.safeParse(values)
@@ -30,6 +36,16 @@ export const RegisterAction = async (values: z.infer<typeof RegisterSchame>): Pr
         }})
      if(!newUser) return {error: "Không thể tạo user"}
 
+    //  Verify email
+    const existingUser = await getUserByEmail(email)
+    if(!existingUser?.emailVerified) {
+      const token = await generateVerificationTokenByEmail(email)
+      if(!token) return {error: "Không thể tạo token"}
+      const isSuccess =  await verificationTokenSendEmail(email, token)
+      if(!isSuccess) return {error: "Gửi token không thành công"}
+      return {success: "Token mới đã được gửi đến email của bạn"}
+    }
+
    } catch (error) {
     console.log(error)
      return {error: "Something went wrong"}
@@ -40,6 +56,16 @@ export const LoginAction = async (values: z.infer<typeof LoginSchame>): Promise<
    const {data, success} = LoginSchame.safeParse(values)
    if(!success) return {error: "Invalid data"}
    const {email, password} = data
+  
+  //  Verify email
+   const existingUser = await getUserByEmail(email)
+   if(!existingUser?.emailVerified) {
+    const token = await generateVerificationTokenByEmail(email)
+    if(!token) return {error: "Không thể tạo token"}
+    const isSuccess =  await verificationTokenSendEmail(email, token)
+    if(!isSuccess) return {error: "Gửi token không thành công"}
+    return {success: "Token mới đã được gửi đến email của bạn"}
+   }
    try {
      await signIn("credentials", {
       email,
@@ -51,6 +77,8 @@ export const LoginAction = async (values: z.infer<typeof LoginSchame>): Promise<
       switch (error.type) {
         case "CredentialsSignin":
           return {error: "Invalid Credentials"}
+        case "AccessDenied":
+          return {error: "You have to verify your email"}
         default:
           return {error: "Something went wrong"}
       }

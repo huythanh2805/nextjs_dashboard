@@ -5,6 +5,7 @@ import { getUserByEmail } from "./data/user"
 import bcrypt from "bcryptjs"
 import Google from "next-auth/providers/google"
 export default {
+  trustHost: true,
   providers: [
     Google,
     Credentials({

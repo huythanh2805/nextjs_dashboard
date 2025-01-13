@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const forgetPasswordSchame = z.object({
+  email: z.string().min(2).max(50),
+  code: z.string().min(6).max(6).optional(),
+  password: z.string()
+})
+
 export const RegisterSchame = z.object({
   email: z.string().email({message: "Email không hợp lệ"}),
   password: z.string({required_error: "Bạn cần nhập mật khẩu"}),

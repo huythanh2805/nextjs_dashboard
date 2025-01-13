@@ -2,15 +2,12 @@ import { FcGoogle } from "react-icons/fc";
 import { rougeScript } from '@/lib/font';
 import { EyesAnimation } from './animation';
 import { signIn } from "@/auth";
+import { handleLoginWithGoogle } from "@/actions/Auth";
 type Props = {
     children: React.ReactNode
     title: string
 }
 const AuthCardWrapper: React.FC<Props> = ({children, title}) => {
-  const handleLoginWithGoogle = async () => {
-    "use server"
-    await signIn("google")
-  }
   return (
     <div className='min-w-[400px] rounded-lg bg-white shadow-panelShadown shadow-neutral-500 pt-2 pb-8 px-5 flex flex-col '>
       <div className='w-full flex flex-col items-center justify-center gap-2'>

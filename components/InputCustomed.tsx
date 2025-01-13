@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 type Props = {
   type: string,
   placeHolder: string,
-  value: string,
+  value?: string,
   setValue: (value: string) => void,
 }
 const InputCustomed: React.FC<Props> = ({
@@ -20,7 +20,7 @@ const InputCustomed: React.FC<Props> = ({
       className="relative h-[50px] w-full"
     >
       <motion.p 
-       className="absolute px-2"
+       className="absolute px-2 h-fit rounded-md py-0"
        initial={{
         top: 12,
         marginLeft: 20,

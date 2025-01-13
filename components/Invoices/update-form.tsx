@@ -34,7 +34,7 @@ const UpdateFormInvoice: React.FC<Props> = ({ customers, invoiceId }) => {
     });
 // React query
   const queryClient = useQueryClient()
-  const {data: Invoice, error, isLoading} = useQuery({
+  const {data: Invoice} = useQuery({
     queryKey: ["GetUpdateInvoice"],
     queryFn: () => getDetailInvoice(invoiceId)
   })

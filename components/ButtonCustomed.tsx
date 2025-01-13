@@ -4,11 +4,11 @@ import { useState } from "react";
 import React from "react";
 
 type Props = {
-    buttonText: string,
+    buttonText?: string,
     handleClick?: () => void
     loading?: boolean
 }
-const ButtonCustome: React.FC<Props> = ({ buttonText, handleClick, loading = false }) => {
+const ButtonCustome: React.FC<Props> = ({ buttonText = "Click", handleClick, loading = false }) => {
   const [isHovered, setIsHovered] = useState(false); // State để theo dõi hover
   
   return (
